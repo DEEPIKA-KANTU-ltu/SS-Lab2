@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+    <style>
+        body {font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; margin: 2rem;}
+        form { max-width: 420px; display: grid; gap: .75rem; }
+        label {font-weight: 600; }
+        input[type="email"], input[type="password"] {
+            width: 100%; padding: .6rem .75rem ; border: 1px solid #ccd; border-radius: .5rem;
+        }
+        input[type="submit"] {
+            padding: .6rem .9rem; border: 0; border-radius: .5rem; cursor: pointer;
+            background: #333; color: white; font-weight: 600;
+        }
+        .help { font-size: .9rem; color: #555;}
+        a { color: #0b5; font-weight: 600; text-decoration: none;}
+        a:hover {text-decoration: underline;}
+    </style>
+</head>
+<body>
+    <h1>Edit User</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {%nif messages %}
+            <ul style="color: #7a1b1b;">
+                    {% for message in messages %} <li>{{ message }}</li>{% endfor %}
+            </ul>
+        {% endif % }
+    {% endwith %}
+
+     <form method="POST" action="{{ url_for('edit_user',user_id=user[0])}}">
+        <div>
+            <label for="first_name">Fisrt ame</label>
+            <input type="text" id="first_name" name="first_name" value="{{ user[1] }}" required>
+        </div>
+        <div>
+            <label for="last_name">Last Name</label>
+            <input type="text" id="last_name" name="last_name" value="{{ user[2] }}" required>
+        </div>
+        <div>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="{{ user[3] }}" required>
+        </div>
+        <div>
+            <label for="password">New Password (optional)</label>
+            <input type="password" id="password" name="password">
+            <div class="help">Leave blank to keep the existing password</div>
+        </div>
+ 
+        <input type="submit" value="Save changes" />
+    </form>
+
+    <p>
+        <a href="{{url_for(users)}}">Back to Users</a>
+    </p>
+</body>
+</html>

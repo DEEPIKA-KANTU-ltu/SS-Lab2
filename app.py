@@ -13,7 +13,7 @@ def init_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS users (
-                   id INTEGER RIMARY KEY AUTOINCREMENT,
+                   id INTEGER PRIMARY KEY AUTOINCREMENT,
                    first_name TEXT NOT NULL,
                    last_name TEXT NOT NULL,
                    email TEXT NOT NULL,
@@ -33,24 +33,24 @@ def init_db():
 @app.route("/")
 def register():
     return render_template("register.html")
-
+ 
 @app.route("/register", methods=["POST"])
 def do_register():
-    first_name = request.form,get("first_name", "").strip()
-    last_name = request.form,get("last_name", "").strip()
-    email = request.form,get("email", "").strip()
-    password = request.form,get("password", "")
+    first_name = request.form.get("first_name", "").strip()
+    last_name = request.form.get("last_name", "").strip()
+    email = request.form.get("email", "").strip()
+    password = request.form.get("password", "")
 
     if not (first_name and last_name and email and password):
         flash("all fields are required.")
-        return redirect(url_for("refister"))
+        return redirect(url_for("register"))
     
     hashed_password = generate_password_hash(password, method="pbkdf2:sha256" )
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     #pre check duplicate
-    cursor.execute("SELECT 1 FROME users WHERE lower(email) = lower(?)", (email,))
+    cursor.execute("SELECT 1 FROM users WHERE lower(email) = lower(?)", (email,))
     if cursor.fetchone():
         flash("This email is already registered.Please log in instead.")
         conn.close()
@@ -86,12 +86,12 @@ def login():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("""
-                   SELECT id, first_name, email, password
+                   SELECT id, first_name, last_name, email, password
                    FROM users 
                    WHERE lower(email) = lower(?)""", (email,))
     row = cursor.fetchone()
     conn.close()
-
+ 
     if not row:
         flash("Invalid email or password.")
         return redirect(url_for("login"))
@@ -121,7 +121,7 @@ def dashboard():
     if "user_id" not in session:
         flash("Please log in to continue")
         return render_template(url_for("login"))
-    return render_template(url_for(dashboard.html))
+    return render_template('dashboard.html')
     
 #List users
 @app.route("/users")
@@ -130,7 +130,7 @@ def users():
     cursor = conn.cursor()
     cursor.execute("""
                    SELECT id, first_name, last_name, email, created_at
-                   FROM users ORDER BY create_at DESC""")
+                   FROM users ORDER BY created_at DESC""")
     rows = cursor.fetchall()
     conn.close()
     return render_template("users.html", users=rows)
@@ -195,7 +195,7 @@ def edit_user(user_id):
     
     #Duplicate email check
     cursor.execute("""
-                   SELECT 1 FROM users WHERE lower(email) = lower(?) AND id !+ ?""", (email, user_id))
+                   SELECT 1 FROM users WHERE lower(email) = lower(?) AND id != ?""", (email, user_id))
     if cursor.fetchone():
         conn.close()
         flash("That email is already in use by another account.")
@@ -205,7 +205,11 @@ def edit_user(user_id):
     if new_password.strip():
         hashed = generate_password_hash(new_password.strip(), method="pbkdf2:sha256")
         cursor.execute("""
-                       UPDATE users SET first_name = ?, last_name = ?, email = ?, password = ? WHERE id =? """, (first_name,last_name,email,user_id))
+                       UPDATE users SET first_name = ?, last_name = ?, email = ?, password = ? WHERE id =? """, (first_name,last_name,email,hashed,user_id))
+    else:
+        cursor.execute("""
+                       UPDATE users SET first_name = ?, last_name = ?, email = ? WHERE id =? """, (first_name,last_name,email,user_id))
+   
         conn.commit()
         conn.close()
 
@@ -218,7 +222,8 @@ def edit_user(user_id):
         return redirect(url_for("users"))
     
     #Entry
-    if __name__ == "__main__":
-        init_db()
-        app.run(port=5000, debug=False)
+   
+if __name__ == "__main__":
+    init_db()
+    app.run(port=5000, debug=False)
          

@@ -24,11 +24,11 @@
     <h1>Edit User</h1>
 
     {% with messages = get_flashed_messages() %}
-        {%nif messages %}
+        {% if messages %}
             <ul style="color: #7a1b1b;">
                     {% for message in messages %} <li>{{ message }}</li>{% endfor %}
             </ul>
-        {% endif % }
+        {% endif %}
     {% endwith %}
 
      <form method="POST" action="{{ url_for('edit_user',user_id=user[0])}}">
@@ -54,7 +54,7 @@
     </form>
 
     <p>
-        <a href="{{url_for(users)}}">Back to Users</a>
+        <a href="{{url_for('users')}}">Back to Users</a>
     </p>
 </body>
 </html>

@@ -24,13 +24,13 @@
     <h1>Login</h1>
 
     {% with messages = get_flashed_messages() %}
-        {%nif messages %}
+        {% if messages %}
             <div class="messages">
                 <ul>
                     {% for message in messages %} <li>{{ message }}</li>{% endfor %}
                 </ul>
             </div>
-        {% endif % }
+        {% endif %}
     {% endwith %}
 
     <form method="POST" action="{{ url_for('login')}}">
@@ -47,7 +47,7 @@
 
     <p>
         New user? <a href="{{url_for('register')}}">Create an account</a>  |
-        <a href="{{url_for(users)}}">Registered Users</a>
+        <a href="{{url_for('users')}}">Registered Users</a>
     </p>
 </body>
 </html>

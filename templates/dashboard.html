@@ -14,11 +14,11 @@
     <h1>Dashboard</h1>
 
      {% with messages = get_flashed_messages() %}
-        {%nif messages %}
+        {% if messages %}
             <ul>
                     {% for message in messages %} <li>{{ message }}</li>{% endfor %}
             </ul>
-        {% endif % }
+        {% endif %}
     {% endwith %}
 
     <p>Hello, {{ session.user_name }} ({{ session.user_email }})!</p>

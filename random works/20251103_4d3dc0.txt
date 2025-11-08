@@ -1,0 +1,27 @@
+┌─────────────────────────────────────────────────────────────┐
+│                     STROKE PREVENTION PORTAL                │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  Welcome, John Smith!                                       │
+│                                                             │
+│  ┌─────────────────┐  ┌─────────────────┐                   │
+│  │   MY PROFILE    │  │  MY APPOINTMENTS│                   │
+│  │                 │  │                 │                   │
+│  │  Age: 45        │  │  Nov 15: Dr.    │                   │
+│  │  Gender: Male   │  │  Smith - 10:00AM│                   │
+│  │  Risk: Medium   │  │                 │                   │
+│  └─────────────────┘  └─────────────────┘                   │
+│                                                             │
+│  RECENT HEALTH METRICS:                                     │
+│  ┌────────────┬────────────┬─────────────┐                  │
+│  │  GLUCOSE   │    BMI     │   BP STATUS │                  │
+│  │   142      │   26.5     │  Normal     │                  │
+│  │   mg/dL    │            │             │                  │
+│  └────────────┴────────────┴─────────────┘                  │
+│                                                             │
+│  HEALTH TIPS:                                               │
+│  • Consider reducing sugar intake                          │
+│  • Schedule regular exercise                               │
+│  • Next check-up in 30 days                                │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘

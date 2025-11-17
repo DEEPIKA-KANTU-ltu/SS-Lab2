@@ -38,21 +38,62 @@
     {% endwith %}
 
     <form method="POST" action="{{ url_for('do_register')}}">
+        <!--First Name-->
         <div class="container">
-            <label for="first_name">First Name</label>
+            <label for="first_name">First Name: </label>
             <input type="text" id="first_name" name="first_name" required>
         </div>
-
+          <!--Last name-->
         <div class="container">
-            <label for="last_name">Last Name</label>
+            <label for="last_name">Last Name: </label>
             <input type="text" id="last_name" name="last_name" required>
         </div>
+          <!--Gender-->
+        <label for="gender">Gender </label>
+            <select name="gender" id="gender" required>
+                <option value="">Select</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+              <!-- <option value="2">Others</option> not in dataset --> 
+            </select>
+              <!--Age-->
+        <div class="container">
+            <label for="age">Age: </label>
+            <input type="number" id="age" name="age" required>
+        </div> 
+          <!--Work type-->   
+        <label for="work-type">Work Type: </label>
+            <select name="work-type" id="work-type" required>
+                <option value="">Select Work Type</option>
+                <option value="Children">Children</option>
+                <option value="Gov_job">Government Job</option>
+                <option value="Never_worked">Never Worked</option>
+                <option value="Private">Private</option>
+                <option value="Self-employed">Self-employed</option>
+            </select>
+          <!--Residence type-->
+         <label for="residence_type">Residence Type </label>
+            <select name="residence_type" id="residence_type" required>
+                <option value="">Select Residence: </option>
+                <option value="Rural">Rural</option>
+                <option value="Urban">Urban</option>
+            </select>
 
+          <!--Marrige status-->
+        <label for="ever_married">Marrige Status </label>
+            <select name="ever_married" id="ever_married" required>
+                <option value="">Select Marrige Status: </option>
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+            </select>
+
+          <!--Email-->
         <div class="container">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required>
         </div>
 
+          <!--Password-->
         <div class="container">
             <label for="password">password</label>
             <input type="password" id="password" name="password" required>

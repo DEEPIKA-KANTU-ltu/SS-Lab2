@@ -5,7 +5,7 @@ import sqlite3
 app = Flask(__name__)
 app.config["SECRET_KEY"]= "change-me-in-production"
 
-DB_PATH = "users2.db"
+DB_PATH = "users_data.db"
 
 #Database init (email Unique, case_insensitive)
 
@@ -16,8 +16,19 @@ def init_db():
                    id INTEGER PRIMARY KEY AUTOINCREMENT,
                    first_name TEXT NOT NULL,
                    last_name TEXT NOT NULL,
+                   gender Text,
+                   age INTEGER,
+                   work_type Text,
+                   residence_type TEXT,
+                   ever_married TEXT,
                    email TEXT NOT NULL,
                    password TEXT NOT NULL,
+                   hypertension INTEGER,
+                   heart_disease INTEGER,
+                   avg_glucose_level REAL,
+                   bmi REAL,
+                   smoking_status TEXT,
+                   stroke INTEGER,
                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                    )""")
     #case-insensitive uniqueness on email
@@ -38,6 +49,11 @@ def register():
 def do_register():
     first_name = request.form.get("first_name", "").strip()
     last_name = request.form.get("last_name", "").strip()
+    gender = request.form.get("gender", "").strip()
+    age = request.form.get("age", "").strip()
+    work_type = request.form.get("work_type", "").strip()
+    residence_type = request.form.get("residence_type", "").strip()
+    ever_married = request.form.get("ever_married", "").strip()
     email = request.form.get("email", "").strip()
     password = request.form.get("password", "")
 
@@ -57,7 +73,7 @@ def do_register():
         return redirect(url_for("login"))
     try:
         cursor.execute("""
-                       INSERT INTO users (first_name, last_name, email, password) VALUES (?,?,?,?)""",(first_name,last_name,email,hashed_password))
+                       INSERT INTO users (first_name, last_name,gender, age, work_type, residence_type, ever_married, email, password) VALUES (?,?,?,?,?,?,?,?,?)""",(first_name,last_name,gender, age, work_type, residence_type, ever_married,email,hashed_password))
         conn.commit()
         flash("Registration succesful! Please log in.")
 
@@ -120,7 +136,7 @@ def logout():
 def dashboard():
     if "user_id" not in session:
         flash("Please log in to continue")
-        return render_template(url_for("login"))
+        return redirect(url_for("login"))
     return render_template('dashboard.html')
     
 #List users
@@ -129,14 +145,14 @@ def users():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("""
-                   SELECT id, first_name, last_name, email, created_at
-                   FROM users ORDER BY created_at DESC""")
+                   SELECT id, first_name, last_name, gender, age, work_type, residence_type, ever_married, email, hypertension, heart_disease, avg_glucose_level, bmi, smoking_status, stroke,created_at
+                   FROM users ORDER BY created_at DESC""")#FROM users ORDER BY created_at DESC""")
     rows = cursor.fetchall()
     conn.close()
     return render_template("users.html", users=rows)
 
 #Delete user
-@app.post("/users/<int:user_id>/delete")
+@app.route("/users/<int:user_id>/delete", methods=["POST"])
 def delete_user(user_id):
     if "user_id" not in session:
         flash("Please log in to continue.")
@@ -180,11 +196,17 @@ def edit_user(user_id):
             flash("User not found")
             return redirect(url_for("users"))
         #row = id,first_name, last_name, email
-        return render_template("edit_user.html",user=row)
+        flash("Profile updated successfully.")
+        return render_template("edit_user.html", user=row)
     
     #POST : update fields
     first_name = request.form.get("first_name", "").strip()
     last_name = request.form.get("last_name", "").strip()
+    gender = request.form.get("gender", "").strip()
+    age = request.form.get("age", "").strip()
+    work_type = request.form.get("work_type", "").strip()
+    residence_type = request.form.get("residence_type", "").strip()
+    ever_married = request.form.get("ever_married", "").strip()
     email = request.form.get("email", "").strip()
     new_password = request.form.get("password", "")
     
@@ -205,10 +227,10 @@ def edit_user(user_id):
     if new_password.strip():
         hashed = generate_password_hash(new_password.strip(), method="pbkdf2:sha256")
         cursor.execute("""
-                       UPDATE users SET first_name = ?, last_name = ?, email = ?, password = ? WHERE id =? """, (first_name,last_name,email,hashed,user_id))
+                       UPDATE users SET first_name = ?, last_name = ?, gender=?,age=?, work_type=?, residence_type=?,ever_married=?, email = ?, password = ? WHERE id =? """, (first_name,last_name, gender,age, work_type, residence_type, ever_married,email,hashed,user_id))
     else:
         cursor.execute("""
-                       UPDATE users SET first_name = ?, last_name = ?, email = ? WHERE id =? """, (first_name,last_name,email,user_id))
+                       UPDATE users SET first_name = ?, last_name = ?, gender=?,age=?, work_type=?, residence_type=?,ever_married=?, email = ? WHERE id =? """, (first_name,last_name,gender,age, work_type, residence_type, ever_married,email,user_id))
    
         conn.commit()
         conn.close()
@@ -221,6 +243,65 @@ def edit_user(user_id):
         flash("User updated succesfully.")
         return redirect(url_for("users"))
     
+
+@app.route("/add_info", methods=["GET", "POST"])
+def add_info():
+    if "user_id" not in session:
+        flash("Please log in to continue.")
+        return redirect(url_for("login"))
+    
+    if request.method == "POST":
+        hypertension = request.form.get("hypertension")
+        heart_disease = request.form.get("heart_disease")
+        avg_glocose_level = request.form.get("avg_glucose_level")
+        bmi = request.form.get("bmi")
+        smoking_status = request.form.get("smoking_status")
+        stroke = request.form.get("stroke")
+
+        conn = sqlite3.connect(DB_PATH)
+        cusror = conn.cursor()
+        cusror.execute("""UPDATE users 
+                       SET hypertension=?, heart_disease=?, avg_glucose_level=?, bmi=?, smoking_status=?, stroke=?
+                       WHERE id=? """,
+                       (hypertension, heart_disease, avg_glocose_level,bmi,smoking_status,stroke, session["user_id"]))
+        conn.commit()
+        conn.close()
+
+        flash("Medical Information updated sucessfuly.")
+        return redirect(url_for("dashboard"))
+    return render_template("add_info.html")
+
+@app.route("/analyze", methods=["GET", "POST"])
+def analyze():
+    if "user_id" not in session:
+        flash("Please log in to continue.")
+        return redirect(url_for("login"))
+    
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT id, first_name, last_name, age, gender, 
+            bmi, avg_glucose_level, hypertension, heart_disease
+            FROM users WHERE id=?
+                   """, (session["user_id"],))
+    user = cursor.fetchone()
+    conn.close()
+    return render_template("analyze.html", user = user)
+
+
+@app.route("/history", methods=["GET", "POST"])
+def history():
+    if "user_id" not in session:
+        flash("Please log in to continue.")
+        return redirect(url_for("login"))
+    return render_template("history.html")
+
+@app.route("/feedback", methods=["GET", "POST"])
+def feedback():
+    if "user_id" not in session:
+        flash("Please log in to continue.")
+        return redirect(url_for("login"))
+    return render_template("feedback.html")
     #Entry
    
 if __name__ == "__main__":

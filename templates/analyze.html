@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Analysis</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            .profile, .metrics, .tips { margin-bottom: 30px;}
+            .button { background: #007bd3; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;}
+            .button:hover {background: #015088;}
+        }
+    </style>
+</head>
+<body>
+    <h1>Health Profile</h1>
+    <div class="profile">
+        <h2>Profile</h2>
+        <p><strong>Name:</strong> {{ user[1] }} {{ user[2] }}</p>
+        <p><strong>Age:</strong> {{ user[3] }}</p>
+        <p><strong>Gender:</strong> {{ user[4] }}</p>
+
+    </div>
+        <!--Recent health mestrics-->
+    <div class="metrics">
+        <h2>Recent Health Metrics</h2>
+        <p><strong>BMI:</strong> {{ user[5] }} </p>
+        <p><strong>Glucose Level:</strong> {{ user[6] }}</p>
+        <p><strong>Hypertension:</strong>
+             {% if user[7] == 1 %}
+              Have Hypertension
+             {% else %}
+              No Hypertension 
+            {% endif %}</p>
+        <p><strong>eart Disease:</strong> 
+            {% if user[8] == 1 %} 
+            Yes 
+            {% else %} 
+            No 
+            {% endif %}</p>
+    </div>
+    <!--Health Tips-->
+    <div class="tips">
+        <h2>Health Tips</h2>
+        <ul>
+            <li>Maintain a balenced diet rich in vegetables and protiens.</li>
+            <li>Excercise at least 30 minutes daily.</li>
+            <li>Monitor your blood pressure and glucose regularly</li>
+        </ul>
+    </div>
+    <a href="{{ url_for('add_info') }}" class="button">Update Medical Details</a>
+   <!-- <a href="{{ url_for('edit_user' , user_id=user[0]) }}" class="button">Update Personal Details</a>-->
+     <a class="button" href="{{ url_for('edit_user', user_id = user[0]) }}">Update Personal Details</a>
+    
+</body>
+</html>

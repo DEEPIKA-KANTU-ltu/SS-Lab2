@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient History</title>
+</head>
+<body>
+    <h2>Your Medical History</h2>
+    <ul>
+        {% for record in records %}
+        <li>{{ record.timestamp }} -> BMI: {{ record.snapshot.bmi }}, Glucose: {{ record.snapshot.avg_glucose_levels }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

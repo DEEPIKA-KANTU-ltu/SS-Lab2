@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration</title>
+  <style>
+    body { font-family: system-ui, sans-serif; }
+    form { max-width: 420px; display: grid; gap: .75rem; }
+    label { font-weight: 600; }
+    input, select {
+      width: 100%; padding: .6rem .75rem; border: 1px solid #ccd; border-radius: .5rem;
+    }
+    input[type="submit"] {
+      padding: .6rem .9rem; border: 0; border-radius: .5rem; cursor: pointer;
+      background: #333; color: white; font-weight: 600;
+    }
+    .messages { margin-bottom: 1rem; padding: .75rem; border-radius: .5rem; background: #fff6f6; border: 1px solid #f3c2c2; color: #7a1b1b; }
+    .container { display: grid; gap: .25rem; }
+    a { color:#0b5; font-weight:600; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Registration</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="messages">
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="{{ url_for('do_register')}}">
+    <!-- Role -->
+    <div>
+      <label for="role">Select Role</label>
+      <select name="role" id="role" onchange="toggleFields()" required>
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+
+    <!-- Common fields -->
+    <div class="container">
+      <label for="first_name">First Name:</label>
+      <input type="text" id="first_name" name="first_name" required>
+    </div>
+    <div class="container">
+      <label for="last_name">Last Name:</label>
+      <input type="text" id="last_name" name="last_name" required>
+    </div>
+    <div class="container">
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" required>
+    </div>
+    <div class="container">
+      <label for="gender">Gender:</label>
+      <select name="gender" id="gender" required>
+        <option value="">Select</option>
+        <option value="Female">Female</option>
+        <option value="Male">Male</option>
+      </select>
+    </div>
+
+    <!-- User-only fields -->
+    <div id="userFields">
+      <label for="work_type">Work Type:</label>
+      <select name="work_type" id="work_type">
+        <option value="">Select Work Type</option>
+        <option value="Children">Children</option>
+        <option value="Gov_job">Government Job</option>
+        <option value="Never_worked">Never Worked</option>
+        <option value="Private">Private</option>
+        <option value="Self-employed">Self-employed</option>
+      </select>
+
+      <label for="residence_type">Residence Type:</label>
+      <select name="residence_type" id="residence_type">
+        <option value="">Select Residence</option>
+        <option value="Rural">Rural</option>
+        <option value="Urban">Urban</option>
+      </select>
+
+      <label for="ever_married">Marriage Status:</label>
+      <select name="ever_married" id="ever_married">
+        <option value="">Select</option>
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+      </select>
+    </div>
+
+    <!-- Admin-only fields -->
+    <div id="adminFields" style="display:none;">
+      <label for="department">Department:</label>
+      <input type="text" id="department" name="department">
+
+      <label for="contact">Contact:</label>
+      <input type="text" id="contact" name="contact">
+    </div>
+
+    <!-- Email & Password -->
+    <div class="container">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div class="container">
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+
+    <input type="submit" value="Register">
+  </form>
+
+  <p>Already have an Account? <a href="{{ url_for('login')}}">Log in</a></p>
+  <p><a href="{{ url_for('users')}}">View Registered Users</a></p>
+
+  <script>
+    function toggleFields() {
+      const role = document.getElementById("role").value;
+      document.getElementById("userFields").style.display = (role === "user") ? "block" : "none";
+      document.getElementById("adminFields").style.display = (role === "admin") ? "block" : "none";
+    }
+  </script>
+</body>
+</html>

@@ -1,72 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feedback</title>
-    <style>
-        body { 
-            font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background-color: #f2f2f2;
-            padding: 40px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback</title>
+  <style>
+    body { 
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      background-color: #f2f2f2;
+      padding: 40px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 { text-align: center; margin-bottom: 20px; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #cccccc;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover { background-color: #005fa3; }
+    .flashes {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+    .flashes li {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+    ul.feedback-list { list-style: none; padding: 0; }
+    ul.feedback-list li {
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    ul.feedback-list li strong { color: #0077cc; }
+  </style>
 
-        .container {
-            max-width: 500px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.091);
-        }
-        h2 {
-            text-align: center;
-        }
-        label {
-            display: block;
-            margin-top: 15px;
-        }
-        select, textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border-radius: 5px;
-            border: 1px solid #cccccc;
-        }
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #0077cc;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #005fa3;
-        }
-    </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 <body>
-    <div>
-        <h2>We value your openion</h2>
-        <form method="POST">
-            <label for="rating">Rate your experiance:</label>
-            <select name="rating" id="rating" required>
-                <option value="">Select</option>
-                <option value="1">Very Poor (1)</option>
-                <option value="2">Poor (2)</option>
-                <option value="3">Average (3)</option>
-                <option value="4">Good (4)</option>
-                <option value="5">Excellent (5)</option>
-            </select>
+  <div class="container">
+    <h2>We Value Your Opinion</h2>
 
-            <label for="comment">Your Comment:</label>
-            <textarea name="comment" id="comment" rows="5" placeholder="Write your feedback here..." required></textarea>
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 
-            <button type="submit">Submit</button>
-        </form>
-    </div>
-    
+    <!-- Feedback list -->
+    <h2>Previous Feedback</h2>
+    <ul class="feedback-list">
+      {% for f in feedback %}
+        <li>
+          <strong>Rating:</strong> {{ f.rating }} <br>
+          <strong>Comment:</strong> {{ f.comment }} <br>
+          <em>Submitted on: {{ f.timestamp }}</em>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <!-- Feedback form -->
+    <form method="POST">
+      <label for="rating">Rate your experience:</label>
+      <select name="rating" id="rating" required>
+        <option value="">Select</option>
+        <option value="1">Very Poor (1)</option>
+        <option value="2">Poor (2)</option>
+        <option value="3">Average (3)</option>
+        <option value="4">Good (4)</option>
+        <option value="5">Excellent (5)</option>
+      </select>
+
+      <label for="comment">Your Comment:</label>
+      <textarea name="comment" id="comment" rows="5" placeholder="Write your feedback here..." required></textarea>
+
+      <button type="submit">Submit Feedback</button>
+    </form>
+  </div>
 </body>
 </html>

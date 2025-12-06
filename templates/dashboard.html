@@ -1,109 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>    
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: url("abc.jpg") no-repeat center center fixed;
-            background-size: cover;
-            color: white;
-        }
-        header {
-            background-color: rgba(0, 0, 0, 0.63);
-            padding: 10px 0;
-        }
-        .nav-links {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 0;
-            padding: 0;
-        }
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard</title>    
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: url("static/abc.jpg") no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+    header {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 12px 0;
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .nav-links a:hover { text-decoration: underline; }
 
-        main {
-            text-align: center;
-            padding: 100px 20px;
-        }
-        .overlay {
-            background-color: rgba(0, 0, 0, 0.63);
-            display: inline-block;
-            padding: 3-px;
-            border-radius: 10px;
-        }
-        .btn {
-            display: inline-block;
-            margin: 15px;
-            padding: 10px 20px;
-            background-color: #0077cc;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        footer {
-            position: fixed;
-            bottom: 10px;
-            width: 100%;
-            text-align: center;
-            background-color: rgba(0, 0, 0, 0.63);
-            padding: 10px 0;
-        }
-        footer a {
-            color: white;
-            text-decoration: none;
-            margin: 0 10px;
-        }
+    main {
+      padding: 60px 20px;
+    }
+    .overlay {
+      background-color: rgba(255, 255, 255, 0.85);
+      color: #333;
+      border-radius: 12px;
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    h1 { margin-bottom: 10px; color: #00aaff; }
+    h2 { margin: 20px 0 10px; color: #0077cc; }
 
-        a { color: #0b5; font-weight: 600; text-decoration: none;}
-        a:hover {text-decoration: underline;}
-    </style>
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .card {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-4px); }
+
+   .btn {
+    display: inline-block;
+    width: 100%;          
+    padding: 12px 0;        
+    background: #0077cc;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    text-align: center;     
+    transition: background 0.3s, box-shadow 0.3s;
+    }
+    .btn:hover {
+      background: #005fa3;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    footer {
+      text-align: center;
+      background: rgba(0,0,0,0.7);
+      padding: 12px 0;
+      margin-top: 40px;
+    }
+    footer a {
+      color: #fff;
+      margin: 0 12px;
+      text-decoration: none;
+    }
+    footer a:hover { text-decoration: underline; }
+
+    .popup {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      padding: 12px;
+      border-radius: 6px;
+      margin: 20px auto;
+      max-width: 500px;
+      text-align: center;
+      font-weight: bold;
+      animation: fadeout 5s forwards;
+    }
+    @keyframes fadeout {
+      0% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; display: none; }
+    }
+  </style>
 </head>
 <body>
-    <!--Navigation ribbon-->
-    <header>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="#">Home</a></li>
-                 <li><a href="#">About</a></li><!--just scroll down-->
-                 <li><a href="{{ url_for('add_info')}}">Additional Information</a></li>
-                 <li><a href="{{url_for('logout')}}">Logout</a></li>
+  <!--Navigation ribbon-->
+  <header>
+    <nav>
+      <ul class="nav-links">
+        
+        <li><a href="{{ url_for('feedback')}}">Feedback</a></li>
+        <li><a href="#support">Support</a></li>
+        <li><a href="{{ url_for('logout')}}">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
 
-            </ul>
-        </nav>
-    </header>
-    <main>
-    <h1>Dashboard/Home page</h1>
-    <h2>Understanding Stroke</h2>
-    <p>Stroke is a medical emergency that occurs when blood flow to the brain is inturrupted.</p>
-    <div class="buttons">
-        <a href="{{ url_for('analyze')}}" class="btn">Analyze Your Data</a>
-        <a href="{{ url_for('history')}}" class="btn">Medical History</a>
-    </div>
-     {% with messages = get_flashed_messages() %}
+  <main>
+    <div class="overlay">
+      <h1>Welcome, {{ session.user_name }}</h1>
+      
+
+      <!-- Flash messages -->
+      {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <ul>
-                    {% for message in messages %} <li>{{ message }}</li>{% endfor %}
-            </ul>
+          <div class="popup">
+            {% for message in messages %}
+              <p>{{ message }}</p>
+            {% endfor %}
+          </div>
         {% endif %}
-    {% endwith %}
+      {% endwith %}
 
-    <p>Hello, {{ session.user_name }} ({{ session.user_email }})!</p>
-    <p><a href="{{ url_for('logout')}}">Log out</a></p>
-    <p><a href="{{ url_for('users')}}">View Registers Users</a></p>
-    </main>
+      <h2>Manage & Analyze</h2>
+      <div class="dashboard-grid">
+  <!-- Analyze -->
+  <div class="card">
+    <h3>Risk Analysis</h3>
+    <p>Check your stroke risk based on your latest health data.</p>
+    <a href="{{ url_for('analyze')}}" class="btn">Analyze My Data</a>
+  </div>
 
-    <footer>
-        <a href="{{ url_for('feedback')}}">Feedback</a>
-        <a href="#">Support</a> <!--just scroll down-->
-    </footer>
+  <!-- History -->
+  <div class="card">
+    <h3>Medical History</h3>
+    <p>Review your previous health records and analysis snapshots.</p>
+    <a href="{{ url_for('history')}}" class="btn">View History</a>
+  </div>
+
+  <!-- Personal Info -->
+  <div class="card">
+    <h3>Personal Information</h3>
+    <p>Update and manage your personal profile details anytime.</p>
+    <a href="{{ url_for('edit_user', user_id=session['user_id']) }}" class="btn">Edit Personal Info</a>
+  </div>
+
+  <!-- Medical Info -->
+  <div class="card">
+    <h3>Medical Information</h3>
+    <p>Edit your medical metrics and lifestyle data to keep your profile current.</p>
+    <a href="{{ url_for('add_info') }}" class="btn">Update Medical Info</a>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </main>
+
+  <section id="support" style="text-align:center; padding:30px; background:rgba(255,255,255,0.9); color:#333; border-top:2px solid #0077cc;">
+  <h2 style="color:#005998;">Need Help?</h2>
+  <p>If you need assistance, reach out to us:</p>
+  <p><strong>Email:</strong> support@healthapp.com</p>
+  <p><strong>Phone:</strong> +44 1234 567890</p>
+  </section>
+
+
+  <footer>
+    <a href="{{ url_for('feedback')}}">Feedback</a>
+    <a href="#support">Support</a>
+
+    
+  </footer>
 </body>
 </html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Patient History</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f2f2f2; padding: 20px; }
+    h1 { text-align: center; }
+    table { border-collapse: collapse; width: 100%; background: white; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background: #0077cc; color: white; }
+    tr:nth-child(even) { background: #f9f9f9; }
+    .btn { display:inline-block; margin-top:20px; padding:10px 20px; background:#0077cc; color:white; text-decoration:none; border-radius:5px; }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+ <h2>All Patient History</h2>
+<table>
+  <thead>
+    <tr>
+      <th>User ID</th>
+      <th>Name</th>
+      <th>Age</th>
+      <th>Gender</th>
+      <th>Work Type</th>
+      <th>Residence</th>
+      <th>Hypertension</th>
+      <th>Heart Disease</th>
+      <th>Glucose</th>
+      <th>BMI</th>
+      <th>Smoking</th>
+      <th>Stroke</th>
+      <th>Risk Score</th>
+      <th>Timestamp</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in history %}
+    <tr>
+      <td>{{ r.user_id }}</td>
+      <td>{{ r.first_name }} {{ r.last_name }}</td>
+      <td>{{ r.age }}</td>
+      <td>{{ r.gender }}</td>
+      <td>{{ r.work_type }}</td>
+      <td>{{ r.residence_type }}</td>
+      <td>{{ r.hypertension }}</td>
+      <td>{{ r.heart_disease }}</td>
+      <td>{{ r.avg_glucose_level }}</td>
+      <td>{{ r.bmi }}</td>
+      <td>{{ r.smoking_status }}</td>
+      <td>{{ r.stroke }}</td>
+      <td>{{ r.risk_score }}</td>
+      <td>{{ r.timestamp }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+  <div style="text-align:center;">
+    <a href="{{ url_for('admin_dashboard') }}" class="btn">⬅ Back to Dashboard</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #f4f8fb;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+}
+
+h1, h2 {
+  text-align: center;
+  color: #005998;
+  margin-bottom: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 30px;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+  color: #005998;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+  border-color: #0077cc;
+  outline: none;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #005998;
+  transform: translateY(-2px);
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+th {
+  background: #0077cc;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+tr:hover {
+  background: #eef6ff;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.high { background: #dc3545; }
+.medium { background: #ffc107; color:#000; }
+.low { background: #28a745; }
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: url("{{ url_for('static', filename='bg.jpg') }}") no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+.dashboard-wrapper {
+  max-width: 1000px;
+  margin: 40px auto;
+  background: rgba(255,255,255,0.9); /* semi-transparent white overlay */
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  padding: 30px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 20px;
+  text-align: center;
+}
+
+.card h3 {
+  color: #005998;
+  margin-bottom: 12px;
+}

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <style>
+    /* Base */
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #f4f6f9; /* light gray background */
+      color: #333;
+    }
+
+    /* Top Navigation */
+    header {
+      background: #2563eb; /* blue bar */
+      padding: 12px 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+    .nav-links a:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    main {
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #1a3d7c;
+      margin-bottom: 30px;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-4px); }
+    .stat-card h6 { margin: 0; font-size: 0.9rem; color: #666; }
+    .stat-card h3 { margin: 10px 0 0; font-size: 1.6rem; color: #2563eb; }
+
+    /* Recent Patients Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 40px;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    th {
+      background: #f0f4ff;
+      color: #1a3d7c;
+    }
+
+    /* Dashboard Grid */
+    .dashboard_bg {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-4px); }
+    .card h3 { margin: 0 0 10px; color: #2563eb; }
+    .card p { margin: 0 0 20px; color: #555; }
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 12px 0;
+      background: #2563eb;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn:hover {
+      background: #1e40af;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('admin_dashboard') }}">Admin Home</a></li>
+        <li><a href="{{ url_for('dashboard') }}">Access User Portal</a></li>
+        <li><a href="{{ url_for('admin_users') }}">Manage Users</a></li>
+        <li><a href="{{ url_for('admin_feedbacks') }}">Feedback</a></li>
+        <li><a href="{{ url_for('admin_history') }}">History</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main  DashboardS-->
+  <main>
+    <h1>Admin Dashboard</h1>
+    <p style="text-align:center;">Hello, {{ session['user_name'] }} ({{ session['user_email'] }})!</p>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card"><h6>Total Patients</h6><h3>{{ total }}</h3></div>
+      <div class="stat-card"><h6>High Risk</h6><h3>{{ high_risk }}</h3></div>
+      <div class="stat-card"><h6>Average Risk</h6><h3>{{ (avg_risk*100)|round(1) }}%</h3></div>
+      <div class="stat-card"><h6>Recent Entries</h6><h3>{{ recent|length }}</h3></div>
+    </div>
+
+    <!-- Recent Patients -->
+    <h2 style="text-align:left;">Recent Patients</h2>
+    <table>
+      <thead><tr><th>Name</th><th>Risk</th><th>Created</th></tr></thead>
+      <tbody>
+        {% for u in recent %}
+          <tr><td>{{ u[1] }} {{ u[2] }}</td><td>{{ (u[3]*100)|round(1) }}%</td><td>{{ u[4] }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Action Cards -->
+    <div class="dashboard_bg">
+      <div class="card">
+        <h3>Manage Users</h3>
+        <p>View and update registered users.</p>
+        <a href="{{ url_for('admin_users') }}" class="btn">Manage Users</a>
+      </div>
+      <div class="card">
+        <h3>User Feedback</h3>
+        <p>Read feedback submitted by users.</p>
+        <a href="{{ url_for('admin_feedbacks') }}" class="btn">View Feedback</a>
+      </div>
+      <div class="card">
+        <h3>Patient History</h3>
+        <p>Review patient medical records.</p>
+        <a href="{{ url_for('admin_history') }}" class="btn">View History</a>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

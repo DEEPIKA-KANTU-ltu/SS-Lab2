@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Feedbacks</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f2f2f2; padding: 20px; }
+    h1 { text-align: center; }
+    table { border-collapse: collapse; width: 100%; background: white; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+    th { background: #0077cc; color: white; }
+    tr:nth-child(even) { background: #f9f9f9; }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+  <h1>All User Feedbacks</h1>
+  <table>
+    <tr>
+      <th>User ID</th>
+      <th>Rating</th>
+      <th>Comment</th>
+      <th>Timestamp</th>
+      <th>Risk Snapshot</th>
+    </tr>
+    {% for f in feedbacks %}
+    <tr>
+      <td>{{ f.user_id }}</td>
+      <td>{{ f.rating }}</td>
+      <td>{{ f.comment }}</td>
+      <td>{{ f.timestamp }}</td>
+      <td>
+        {% if f.analysis %}
+          {{ (f.analysis.risk_score*100)|round(1) }}% — {{ f.analysis.category }}
+        {% else %}
+          N/A
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  <div style="text-align:center; margin-top:20px;">
+  <a href="{{ url_for('admin_dashboard') }}" 
+     style="display:inline-block; padding:10px 20px; background-color:#0077cc; color:white; text-decoration:none; border-radius:5px;">
+    ⬅ Back to Dashboard
+  </a>
+</div>
+
+</body>
+</html>

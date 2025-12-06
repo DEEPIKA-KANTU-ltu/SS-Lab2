@@ -29,7 +29,7 @@
             padding: 10px;
             margin-top: 5px;
             border-radius: 5px;
-            border: 1px soid #ccc;
+            border: 1px solid #ccc;
         }
         button {
             margin-top: 2-px;
@@ -42,9 +42,11 @@
         }
         button:hover{background-color: #005998;}
     </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 </head>
 <body>
-    <div class "container">
+    <div class="container">
         <h2>Enter Your Medical Data</h2>
         <form method="POST">
             <label for="hypertension">Hypertension: </label>
@@ -64,9 +66,9 @@
             <label for="avg_glucose_level">Average Glucose Level: </label>
             <input type="number" name="avg_glucose_level" id="avg_glucose_level" required>
               
-            <label for="ibm">IBM (Body Mass Index): </label>
-            <input type="number" name="ibm" id="ibm" required>
-              
+            <label for="bmi">BMI (Body Mass Index): </label>
+            <input type="number" step="0.1" name="bmi" id="bmi" value="{{ user.bmi if user else '' }}" required>
+
 
             <label for="smoking_status">Smoking Status: </label>
             <select name="smoking_status" id="smoking_status" required>
